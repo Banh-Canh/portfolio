@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"log"
 	"net/http"
@@ -15,15 +16,20 @@ import (
 	"github.com/gorilla/mux"
 )
 
+const postDir = "./posts"
+
 var dynamicRoutes []string
 
 func main() {
+	// Create a new Gorilla mux router
 	r := mux.NewRouter()
+
+	// Create an HTTP server with the router
 	server := &http.Server{
 		Addr:    ":3000",
 		Handler: r,
 	}
-	dir := "./posts"
+	dir := postDir // Directory to watch for file changes
 
 	// Set up file watcher
 	watcher, err := fsnotify.NewWatcher()
@@ -37,12 +43,8 @@ func main() {
 		log.Fatal("Error adding 'posts' directory to watcher:", err)
 	}
 
-	files, err := os.ReadDir(dir)
-	if err != nil {
-		log.Fatal("Error reading directory:", err)
-		return
-	}
-	parsing.CreatePosts(r, files, dynamicRoutes)
+	// create initial routes
+	parsing.CreatePosts(r, dir, dynamicRoutes)
 
 	// Goroutine to watch for file changes
 	go func() {
@@ -57,7 +59,7 @@ func main() {
 					event.Op&fsnotify.Remove == fsnotify.Remove {
 					// Handle file changes (add or remove)
 					log.Printf("File %s modified or added\n", event.Name)
-					handlers.UpdateRoutes(r, files, dynamicRoutes)
+					handlers.UpdateRoutes(r, dir, dynamicRoutes)
 				}
 			case err, ok := <-watcher.Errors:
 				if !ok {
@@ -85,15 +87,26 @@ func main() {
 		}
 	}()
 
+	// Serve 404 pages
 	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Println("404 Not Found:", r.URL.Path)
 		components.NotFoundComponent().Render(r.Context(), w)
 	})
 
+	// Serve IndexPage
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		log.Println("Request:", r.Method, r.URL.Path)
-		components.IndexPage(parsing.GetPosts()).Render(r.Context(), w)
+		var buf bytes.Buffer
+		// Render the IndexPage and write the content into the buffer
+		components.IndexPage(parsing.GetPosts(dir)).Render(context.Background(), &buf)
+		// Get the content of the buffer as a string and store it in the variable indexPage
+		indexPage := buf.String()
+		// Now you can use indexPage as needed
+		components.LoadingPage(indexPage).Render(r.Context(), w)
 	})
+
+	// Serve Static Assets
+	r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 
 	log.Println("Server is listening on :3000")
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
