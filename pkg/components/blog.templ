@@ -1,0 +1,63 @@
+package components
+
+import (
+	"path"
+	"github.com/gosimple/slug"
+	"time"
+)
+
+type Post struct {
+	Date    time.Time
+	Title   string
+	Content string
+}
+
+templ headerComponent(title string) {
+	<head>
+		<title>{ title }</title>
+	</head>
+}
+
+templ footerComponent() {
+	<footer>
+    	2024 Cyberpunk Blog. All rights reserved.
+	</footer>
+	<script src="/assets/js/htmx.min.js"></script>
+}
+
+templ contentComponent(title, date string, body templ.Component) {
+	<body>
+		<h1>{ title }</h1>
+		<h2>{ date }</h2>
+		<div>
+			{! body }
+		</div>
+	</body>
+}
+
+templ ContentPage(title, date string, body templ.Component) {
+	<html>
+		@headerComponent(title)
+		@contentComponent(title, date, body)
+		<div><a href={ templ.URL("/") }>{ "Back" }</a></div>
+		@footerComponent()
+	</html>
+}
+
+templ IndexPage(posts []Post) {
+	<html>
+		@headerComponent("Welcome to the Edge of Punks!")
+		<body>
+			<h1>Welcome to the Edge of Punks!</h1>
+			for _, post := range posts {
+				<div><a href={ templ.URL("/"+path.Join(post.Date.Format("2006/01/02"), slug.Make(post.Title)+"/")) }>{ post.Date.Format("2006/01/02") } : { post.Title }</a></div>
+			}
+		</body>
+		@footerComponent()
+	</html>
+}
+
+templ NotFoundComponent() {
+	<div>404 - Not found</div>
+	@footerComponent()
+}
