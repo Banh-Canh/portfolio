@@ -12,8 +12,16 @@ import (
 	"time"
 
 	"github.com/a-h/templ"
-	"github.com/banhcanh/portfolio/pkg/components"
+	"github.com/gomarkdown/markdown"
+	"github.com/gomarkdown/markdown/html"
+	"github.com/gomarkdown/markdown/parser"
 )
+
+type Post struct {
+	Date    time.Time
+	Title   string
+	Content templ.Component
+}
 
 // Unsafe is a function that creates a templ.Component from raw HTML content
 func Unsafe(html string) templ.Component {
@@ -23,8 +31,23 @@ func Unsafe(html string) templ.Component {
 	})
 }
 
+// mdToHTML converts Markdown content to HTML
+func mdToHTML(md []byte) []byte {
+	// create markdown parser with extensions
+	extensions := parser.CommonExtensions | parser.AutoHeadingIDs | parser.NoEmptyLineBeforeBlock
+	p := parser.NewWithExtensions(extensions)
+	doc := p.Parse(md)
+
+	// create HTML renderer with extensions
+	htmlFlags := html.CommonFlags | html.HrefTargetBlank
+	opts := html.RendererOptions{Flags: htmlFlags}
+	renderer := html.NewRenderer(opts)
+
+	return markdown.Render(doc, renderer)
+}
+
 // parseMarkdownFile extracts metadata (Date, Title) and content from a Markdown file
-func ParseMarkdownFile(content []byte) components.Post {
+func ParseMarkdownFile(content []byte) Post {
 	lines := strings.Split(string(content), "\n")
 	var date time.Time
 	var title string
@@ -41,16 +64,20 @@ func ParseMarkdownFile(content []byte) components.Post {
 		}
 	}
 
-	return components.Post{
+	md := []byte(contentBuilder.String())
+	html := mdToHTML(md)
+	htmlString := string(html)
+
+	return Post{
 		Date:    date,
 		Title:   title,
-		Content: contentBuilder.String(),
+		Content: writeComponent(htmlString),
 	}
 }
 
 // GetPosts retrieves a list of parsed posts sorted by date
-func GetPosts(dir string) []components.Post {
-	var posts []components.Post
+func GetPosts(dir string) []Post {
+	var posts []Post
 	files, err := os.ReadDir(dir)
 	if err != nil {
 		log.Fatal("Error reading directory:", err)
@@ -73,4 +100,12 @@ func GetPosts(dir string) []components.Post {
 		return posts[i].Date.After(posts[j].Date)
 	})
 	return posts
+}
+
+// writeComponent is a helper function that creates a templ.Component from HTML string
+func writeComponent(htmlString string) templ.Component {
+	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
+		_, err := io.WriteString(w, htmlString)
+		return err
+	})
 }

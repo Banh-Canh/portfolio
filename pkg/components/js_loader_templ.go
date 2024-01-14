@@ -9,55 +9,53 @@ import "github.com/a-h/templ"
 
 func loaderJS(htmlContent string) templ.ComponentScript {
 	return templ.ComponentScript{
-		Name: `__templ_loaderJS_3871`,
-		Function: `function __templ_loaderJS_3871(htmlContent){// Event listener for when the window has finished loading
-    window.addEventListener("load", loaded);
-
-    // Function called when the window is loaded
-    function loaded() {
-        // Promise to wait for all fonts to be loaded
-        const promise1 = new Promise(resolve => {
-            console.log("Wait for all Fonts to be Loaded");
-            document.fonts.ready.then(function() {
-                console.log("Fonts all Loaded");
-                loadCSS( "assets/css/main.css" )
-                resolve("Successfully waited for fonts to be loaded to load CSS");
-            });
-        })
-        .then((value) => {
-            console.log(value);
-        })
-        .catch((value) => {
-            console.log("Couldn't wait for fonts to be loaded. Loaded CSS anyway ... \nCatch Value = " + value);
-            loadCSS( "assets/css/main.css" )
-        })
-        .then(function () {
-            // After fonts are loaded or even if there's an error, loadBodyContent is called
-            // Set the provided HTML as the inner content of the 'bodycontent' element
-            document.getElementById('bodycontent').innerHTML = htmlContent;
-
-            // Execute scripts within the provided HTML content
-            var scripts = document.getElementById("bodycontent").querySelectorAll("script");
-            for (var i = 0; i < scripts.length; i++) {
-                if (scripts[i].innerText) {
-                    // If script is inline, evaluate it
-                    eval(scripts[i].innerText);
-                } else {
-                    // If script is external, fetch and evaluate it
-                    fetch(scripts[i].src).then(function (data) {
-                        data.text().then(function (r) {
-                            eval(r);
-                        })
-                    });
-                }
-                // Remove the script element to avoid repetition
-                scripts[i].parentNode.removeChild(scripts[i]);
-            }
-            console.log("Successfully loaded bodycontent");
-            console.log("Loading BodyContent ...");
+		Name: `__templ_loaderJS_6bb4`,
+		Function: `function __templ_loaderJS_6bb4(htmlContent){// Event listener for when the window has finished loading
+window.addEventListener("load", loaded);
+// Function called when the window is loaded
+function loaded() {
+    // Promise to wait for all fonts to be loaded
+    const promise1 = new Promise(resolve => {
+        console.log("Wait for all Fonts to be Loaded");
+        document.fonts.ready.then(function() {
+            console.log("Fonts all Loaded");
+            //loadCSS( "/assets/css/main.css" )
+            resolve("Successfully waited for fonts to be loaded to load CSS");
         });
-    };}`,
-		Call:       templ.SafeScript(`__templ_loaderJS_3871`, htmlContent),
-		CallInline: templ.SafeScriptInline(`__templ_loaderJS_3871`, htmlContent),
+    })
+    .then((value) => {
+        console.log(value);
+    })
+    .catch((value) => {
+        console.log("Couldn't wait for fonts to be loaded. Loaded CSS anyway ... \nCatch Value = " + value);
+        //loadCSS( "/assets/css/main.css" )
+    })
+    .then(function () {
+        // After fonts are loaded or even if there's an error, loadBodyContent is called
+        // Set the provided HTML as the inner content of the 'bodycontent' element
+        document.getElementById('bodycontent').innerHTML = htmlContent;
+        // Execute scripts within the provided HTML content
+        var scripts = document.getElementById("bodycontent").querySelectorAll("script");
+        for (var i = 0; i < scripts.length; i++) {
+            if (scripts[i].innerText) {
+                // If script is inline, evaluate it
+                eval(scripts[i].innerText);
+            } else {
+                // If script is external, fetch and evaluate it
+                fetch(scripts[i].src).then(function (data) {
+                    data.text().then(function (r) {
+                        eval(r);
+                    })
+                });
+            }
+            // Remove the script element to avoid repetition
+            scripts[i].parentNode.removeChild(scripts[i]);
+        }
+        console.log("Successfully loaded bodycontent");
+        console.log("Loading BodyContent ...");
+    });
+};}`,
+		Call:       templ.SafeScript(`__templ_loaderJS_6bb4`, htmlContent),
+		CallInline: templ.SafeScriptInline(`__templ_loaderJS_6bb4`, htmlContent),
 	}
 }

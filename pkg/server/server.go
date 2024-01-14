@@ -14,7 +14,6 @@ import (
 	"github.com/banhcanh/portfolio/pkg/parsing"
 	"github.com/gorilla/mux"
 	"github.com/gosimple/slug"
-	"github.com/yuin/goldmark"
 )
 
 type Server struct {
@@ -119,18 +118,12 @@ func (s *Server) SetupRoutes(dir string) {
 
 				// Parse Markdown content into a Post struct
 				post := parsing.ParseMarkdownFile(fileContent)
-
-				// Convert Markdown content to HTML using goldmark
 				var buf bytes.Buffer
-				if err := goldmark.Convert([]byte(post.Content), &buf); err != nil {
-					log.Fatalf("failed to convert markdown to HTML: %v", err)
-				}
-
-				// Create a templ.Component from HTML content
-				content := parsing.Unsafe(buf.String())
+				components.ContentPage(post.Title, post.Date.Format("2006/01/02"), post.Content).Render(context.Background(), &buf)
+				contentPage := buf.String()
 
 				// Render the content page with post metadata and HTML content
-				components.ContentPage(post.Title, post.Date.Format("2006/01/02"), content).Render(r.Context(), w)
+				components.LoadingPage(contentPage).Render(r.Context(), w)
 			})
 
 			// Append the dynamically created route to the list

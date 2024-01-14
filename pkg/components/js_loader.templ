@@ -11,7 +11,7 @@ function loaded() {
         console.log("Wait for all Fonts to be Loaded");
         document.fonts.ready.then(function() {
             console.log("Fonts all Loaded");
-            loadCSS( "assets/css/main.css" )
+            //loadCSS( "/assets/css/main.css" )
             resolve("Successfully waited for fonts to be loaded to load CSS");
         });
     })
@@ -20,7 +20,7 @@ function loaded() {
     })
     .catch((value) => {
         console.log("Couldn't wait for fonts to be loaded. Loaded CSS anyway ... \nCatch Value = " + value);
-        loadCSS( "assets/css/main.css" )
+        //loadCSS( "/assets/css/main.css" )
     })
     .then(function () {
         // After fonts are loaded or even if there's an error, loadBodyContent is called

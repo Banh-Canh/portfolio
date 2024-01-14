@@ -3,14 +3,8 @@ package components
 import (
 	"path"
 	"github.com/gosimple/slug"
-	"time"
+	"github.com/banhcanh/portfolio/pkg/parsing"
 )
-
-type Post struct {
-	Date    time.Time
-	Title   string
-	Content string
-}
 
 templ headerComponent(title string) {
 	<header>
@@ -28,29 +22,31 @@ templ footerComponent() {
 }
 
 templ contentComponent(title, date string, body templ.Component) {
-	<body>
+	<div class="markdown-container">
 		<h2>{ title }</h2>
-		<h3>{ date }</h3>
+		<h4>{ date }</h4>
 		<div>
-			{! body }
+			@body
 		</div>
-	</body>
+		<div><a href={ templ.URL("/") }>{ "Back" }</a></div>
+	</div>
+	@loader2JS()
 }
 
 templ ContentPage(title, date string, body templ.Component) {
 	<html>
-		<body hx-get={ "/"+date+"/"+slug.Make(title) } hx-trigger="every 2s">
-			@headerComponent(title)
+		@headerComponent(title)
+		<body>	
 			<main>
 			@contentComponent(title, date, body)
-			<div><a href={ templ.URL("/") }>{ "Back" }</a></div>
 			</main>
 			@footerComponent()
 		</body>
 	</html>
+	
 }
 
-templ IndexPage(posts []Post) {
+templ IndexPage(posts []parsing.Post) {
 	@headerComponent("Welcome to the Edge of Punks!")
 	<h1>Welcome to the Edge of Punks!</h1>
 	<main>
@@ -61,7 +57,7 @@ templ IndexPage(posts []Post) {
 	}
 	</main>
 	@footerComponent()
-	@mainJS()
+	@loader2JS()
 }
 
 templ LoadingPage(htmlString string) {
@@ -75,8 +71,8 @@ templ LoadingPage(htmlString string) {
 			
 			<title>Welcome to the Edge of Punks!</title>		
 		
-			<link rel="icon" href="assets/images/favicon.ico" type="image/x-icon" />
-			<link rel="stylesheet" href="assets/css/style.css"  />
+			<link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon" />
+			<link rel="stylesheet" href="/assets/css/style.css"  />
 		</head>
 		
 		<body>
@@ -90,7 +86,7 @@ templ LoadingPage(htmlString string) {
 			
 			<div id="bodycontent"></div>
 				
-			<script type="text/javascript" src="assets/js/loadCSS.js"></script>			
+			<script type="text/javascript" src="/assets/js/loadCSS.js"></script>			
 			<script src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js"></script>
 			@loaderJS(htmlString)
 		</body>

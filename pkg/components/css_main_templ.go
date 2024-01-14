@@ -29,56 +29,184 @@ func styleCSS() templ.Component {
 		}
 		templ_7745c5c3_Var2 := `
 
-* 
-{
-	color: white;
-	text-shadow:1px 1px 2px white;
-}
-
-html {
-	scroll-behavior: smooth;
-    font-family: 'Anita Semi-Square', sans-serif;
-	font-size:1.25em;
-}
-
-body, #bodycontent {
-	background-color:rgb(0, 27, 39);
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    margin:0;
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f6f8fa;
+  color: #24292e;
 }
 
 header {
-    text-align: center;
-    background-color:black;
+  background-color: #0366d6;
+  color: #ffffff;
+  padding: 10px;
 }
 
-footer {
-    text-align: center;
-    background-color:red;
+header a {
+  color: #ffffff;
+  text-decoration: none;
 }
 
-main {
-  flex: 1;
+header a:hover {
+  text-decoration: underline;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #24292e;
 }
 
 h1 {
-    text-shadow: 0 0 2.5px #fff, 0 0 5px #b57cff, 0 0 10px #b57cff, 0 0 15px #b57cff, 0 0 20px #b57cff, 0 0 25px #b57cff, 0 0 35px #b57cff;
+  font-size: 2em;
+  border-bottom: 1px solid #e1e4e8;
+  padding-bottom: 0.2em;
+  margin-bottom: 0.5em;
 }
 
 h2 {
-    text-shadow: 0 0 2.5px #fff, 0 0 5px #64d8ff, 0 0 10px #64d8ff, 0 0 15px #64d8ff, 0 0 20px #64d8ff, 0 0 25px #64d8ff, 0 0 35px #64d8ff;
+  font-size: 1.5em;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
 }
 
 h3 {
-    text-shadow: 0 0 2.5px #fff, 0 0 5px #66a3ff, 0 0 10px #66a3ff, 0 0 15px #66a3ff, 0 0 20px #66a3ff, 0 0 25px #66a3ff, 0 0 35px #66a3ff;
+  font-size: 1.2em;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
 }
 
 h4 {
-    text-shadow: 0 0 2.5px #fff, 0 0 5px #8aff33, 0 0 10px #8aff33, 0 0 15px #8aff33, 0 0 20px #8aff33, 0 0 25px #8aff33, 0 0 35px #8aff33;
+  font-size: 1.1em;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
 }
 
+h5 {
+  font-size: 1em;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+h6 {
+  font-size: 1em;
+  font-weight: normal;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background-color: #e1e4e8;
+  margin: 1em 0;
+}
+
+ul, ol {
+  margin-bottom: 20px;
+  padding-left: 20px;
+}
+
+ul li,
+ol li {
+  margin-bottom: 8px;
+}
+
+ul ul,
+ol ol {
+  margin-top: 4px;
+}
+
+ul ul,
+ul ol,
+ol ul,
+ol ol {
+  margin-left: 20px;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+ol {
+  list-style-type: decimal;
+}
+
+dl {
+  margin-bottom: 20px;
+}
+
+dt {
+  font-weight: bold;
+}
+
+dd {
+  margin-bottom: 8px;
+}
+
+hr {
+  border: 0;
+  height: 1px;
+  background-color: #e1e4e8;
+  margin: 1em 0;
+}
+
+table {
+  width: auto;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+th, td {
+  border: 1px solid #d1d5da;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f6f8fa;
+}
+
+tr:nth-child(even) {
+  background-color: #f6f8fa;
+}
+
+td a {
+  color: #0366d6;
+  text-decoration: none;
+}
+
+td a:hover {
+  text-decoration: underline;
+}
+
+footer {
+  background-color: #f6f8fa;
+  color: #586069;
+  padding: 16px;
+  text-align: center;
+  font-size: 14px;
+  border-top: 1px solid #e1e4e8;
+  margin-top: 20px;
+}
+
+footer a {
+  color: #0366d6;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+.markdown-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
 
 `
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var2)
