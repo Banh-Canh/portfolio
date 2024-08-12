@@ -3,8 +3,9 @@ package watcher
 import (
 	"log"
 
-	"github.com/banhcanh/portfolio/pkg/server"
 	"github.com/fsnotify/fsnotify"
+
+	"github.com/banhcanh/portfolio/pkg/server"
 )
 
 type Watcher struct {

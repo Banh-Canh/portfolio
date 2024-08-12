@@ -12,10 +12,7 @@ import (
 
 const postDir = "./posts"
 
-var dynamicRoutes []string
-
 func main() {
-
 	log.Println("Server is listening on :3000")
 	s := server.NewServer(":3000")
 

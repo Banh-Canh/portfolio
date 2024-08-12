@@ -10,10 +10,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/banhcanh/portfolio/pkg/components"
-	"github.com/banhcanh/portfolio/pkg/parsing"
 	"github.com/gorilla/mux"
 	"github.com/gosimple/slug"
+
+	"github.com/banhcanh/portfolio/pkg/components"
+	"github.com/banhcanh/portfolio/pkg/parsing"
 )
 
 type Server struct {
@@ -69,7 +70,8 @@ func (s *Server) SetupRoutes(dir string) {
 		components.LoadingPage(indexPage).Render(r.Context(), w)
 	})
 	// Server Assets
-	s.Router.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
+	s.Router.PathPrefix("/assets/").
+		Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 
 	files, err := os.ReadDir(dir)
 	if err != nil {
@@ -98,7 +100,12 @@ func (s *Server) SetupRoutes(dir string) {
 
 			// Rename the file to include the formatted date
 			if err := os.Rename(filePath, newFilePath); err != nil {
-				log.Fatalf("Error renaming file %s to %s: %v\n", currentFile.Name(), newFileName, err)
+				log.Fatalf(
+					"Error renaming file %s to %s: %v\n",
+					currentFile.Name(),
+					newFileName,
+					err,
+				)
 				return
 			}
 
@@ -119,7 +126,8 @@ func (s *Server) SetupRoutes(dir string) {
 				// Parse Markdown content into a Post struct
 				post := parsing.ParseMarkdownFile(fileContent)
 				var buf bytes.Buffer
-				components.ContentPage(post.Title, post.Date.Format("2006/01/02"), post.Content).Render(context.Background(), &buf)
+				components.ContentPage(post.Title, post.Date.Format("2006/01/02"), post.Content).
+					Render(context.Background(), &buf)
 				contentPage := buf.String()
 
 				// Render the content page with post metadata and HTML content
