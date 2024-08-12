@@ -51,7 +51,6 @@ func (s *Server) Stop() {
 
 // CreatePosts creates dynamic routes for each Markdown file and handles the routing logic
 func (s *Server) SetupRoutes(dir string) {
-	var dynamicRoutes []string
 	// Serve 404 pages
 	s.Router.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Println("404 Not Found:", r.URL.Path)
@@ -94,21 +93,6 @@ func (s *Server) SetupRoutes(dir string) {
 			// Parse Markdown content into a Post struct
 			post := parsing.ParseMarkdownFile(fileContent)
 
-			// Create a new filename based on the post date
-			newFileName := post.Date.Format("2006-01-02") + "-" + slug.Make(post.Title) + ".md"
-			newFilePath := filepath.Join(dir, newFileName)
-
-			// Rename the file to include the formatted date
-			if err := os.Rename(filePath, newFilePath); err != nil {
-				log.Fatalf(
-					"Error renaming file %s to %s: %v\n",
-					currentFile.Name(),
-					newFileName,
-					err,
-				)
-				return
-			}
-
 			// Define the route path for the post
 			postPath := "/" + path.Join(post.Date.Format("2006/01/02"), slug.Make(post.Title))
 
@@ -117,7 +101,7 @@ func (s *Server) SetupRoutes(dir string) {
 				log.Println("Request:", r.Method, r.URL.Path)
 
 				// Read content of the renamed file
-				fileContent, err := os.ReadFile(newFilePath)
+				fileContent, err := os.ReadFile(filePath)
 				if err != nil {
 					log.Fatalf("Error reading file %s: %v\n", currentFile.Name(), err)
 					return
@@ -135,7 +119,6 @@ func (s *Server) SetupRoutes(dir string) {
 			})
 
 			// Append the dynamically created route to the list
-			dynamicRoutes = append(dynamicRoutes, postPath)
 			log.Printf("Created dynamic route: %s", postPath)
 		}
 	}
