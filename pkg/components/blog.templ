@@ -1,98 +1,107 @@
 package components
 
 import (
-	"path"
-	"github.com/gosimple/slug"
-	"github.com/banhcanh/portfolio/pkg/parsing"
+"path"
+"github.com/gosimple/slug"
+"github.com/banhcanh/portfolio/pkg/parsing"
 )
 
 templ headerComponent(title string) {
-	<header>
-		<title>{ title }</title>
-		header
-	</header>
+<header>
+    <title>{ title }</title>
+    header
+</header>
 }
 
 templ footerComponent() {
-	<footer>
-    	2024 Cyberpunk Blog. All rights reserved.
-	</footer>
-	@styleCSS()
-	<script src="/assets/js/htmx.min.js"></script>
+<footer>
+    2024 Cyberpunk Blog. All rights reserved.
+</footer>
+@styleCSS()
+<script src="/assets/js/htmx.min.js"></script>
 }
 
 templ contentComponent(title, date string, body templ.Component) {
-	<div class="markdown-container">
-		<h2>{ title }</h2>
-		<h4>{ date }</h4>
-		<div>
-			@body
-		</div>
-		<div><a href={ templ.URL("/") }>{ "Back" }</a></div>
-	</div>
-	@loader2JS()
+<div class="markdown-container">
+    <h2>{ title }</h2>
+    <h4>{ date }</h4>
+    <div>
+        @body
+    </div>
+    <div><a href={ templ.URL("/") }>{ "Back" }</a></div>
+</div>
+@loader2JS()
 }
 
 templ ContentPage(title, date string, body templ.Component) {
-	<html>
-		@headerComponent(title)
-		<body>	
-			<main>
-			@contentComponent(title, date, body)
-			</main>
-			@footerComponent()
-		</body>
-	</html>
-	
+<html>
+@headerComponent(title)
+
+<body>
+    <main>
+        @contentComponent(title, date, body)
+    </main>
+    @footerComponent()
+</body>
+
+</html>
 }
 
 templ IndexPage(posts []parsing.Post) {
-	@headerComponent("Welcome to the Edge of Punks!")
-	<h1>Welcome to the Edge of Punks!</h1>
-	<main>
-	for _, post := range posts {
-		<div>
-			<a href={ templ.URL("/"+path.Join(post.Date.Format("2006/01/02"), slug.Make(post.Title)+"/")) }>{ post.Date.Format("2006/01/02") } : { post.Title }</a>
-		</div>
-	}
-	</main>
-	@footerComponent()
-	@loader2JS()
+@headerComponent("Welcome to the Edge of Punks!")
+<h1>Welcome to the Edge of Punks!</h1>
+<main>
+    for _, post := range posts {
+    <div>
+        <a href={ templ.URL("/" + path.Join(post.Date.Format("2006/01/02"), slug.Make(post.Title)+"/")) }>{
+            post.Date.Format("2006/01/02") } : { post.Title }</a>
+    </div>
+    }
+</main>
+@footerComponent()
+@loader2JS()
 }
 
 templ LoadingPage(htmlString string) {
-	<html lang="en">
-		<head>
-			<meta charset="utf-8" />
-			<meta name="author" content="Victor Hang" />
-			<meta name="description" content="My Portfolio in HTML, CSS & Pure JS" />
-			<meta name="keywords" content="HTML, CSS, JavaScript, Admin, system, network, devops, linux, windows" />
-			<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1" />
-			
-			<title>Welcome to the Edge of Punks!</title>		
-		
-			<link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon" />
-			<link rel="stylesheet" href="/assets/css/style.css"  />
-		</head>
-		
-		<body>
-			<div id="loader">
-				<noscript><div style="z-index:99999;width:100%;top:13%;left:0;position:fixed;background-color:black;text-align:center;font-size:5vw;color:white;">JAVASCRIPT REQUIRED</div></noscript>
-				<div class="sideloader">
-					<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-				</div>
-				
-			</div>
-			
-			<div id="bodycontent"></div>
-				
-			<script type="text/javascript" src="/assets/js/loadCSS.js"></script>			
-			<script src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js"></script>
-			@loaderJS(htmlString)
-		</body>
-	</html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="author" content="Victor Hang" />
+    <meta name="description" content="My Portfolio in HTML, CSS & Pure JS" />
+    <meta name="keywords" content="HTML, CSS, JavaScript, Admin, system, network, devops, linux, windows" />
+    <meta name="viewport"
+        content="width=device-width, height=device-height, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <title>Welcome to the Edge of Punks!</title>
+    <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="/assets/css/style.css" />
+</head>
+
+<body>
+    <div id="loader">
+        <noscript>
+            <div
+                style="z-index:99999;width:100%;top:13%;left:0;position:fixed;background-color:black;text-align:center;font-size:5vw;color:white;">
+                JAVASCRIPT REQUIRED</div>
+        </noscript>
+        <div class="sideloader">
+            <div class="lds-ring">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <div id="bodycontent"></div>
+    <script type="text/javascript" src="/assets/js/loadCSS.js"></script>
+    <script src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js"></script>
+    @loaderJS(htmlString)
+</body>
+
+</html>
 }
 
 templ NotFoundComponent() {
-	<div>404 - Not found</div>
+<div>404 - Not found</div>
 }

@@ -15,13 +15,13 @@ func loader2JS() templ.ComponentScript {
 	var body = document.body;
 	var sideloaders = document.getElementsByClassName("sideloader");
 	setTimeout(function(){		// Wait a bit before opening because font etc.. may still not be fully loaded/rendered and it's uglys..
-		body.style.overflow = "hidden"	
+		body.style.overflow = "hidden"
 		sideloaders[0].style.opacity = "0";
 		sideloaders[0].style.transform = "scale(3)";
 		sideloaders[0].style.zIndex = "-99999";
 		body.style.overflow = "visible"
 		console.log("loading page closed - REAAAADY !!");
-	},100) 
+	},100)
 };
 closeLoadingPage();
 document.getElementById("bodycontent").onscroll = function() {scrollBarProgress()};

@@ -1,27 +1,27 @@
 package components
 
-
 script loader2JS() {
 async function closeLoadingPage()
 {
-	var body = document.body;
-	var sideloaders = document.getElementsByClassName("sideloader");
-	setTimeout(function(){		// Wait a bit before opening because font etc.. may still not be fully loaded/rendered and it's uglys..
-		body.style.overflow = "hidden"	
-		sideloaders[0].style.opacity = "0";
-		sideloaders[0].style.transform = "scale(3)";
-		sideloaders[0].style.zIndex = "-99999";
-		body.style.overflow = "visible"
-		console.log("loading page closed - REAAAADY !!");
-	},100) 
+var body = document.body;
+var sideloaders = document.getElementsByClassName("sideloader");
+setTimeout(function(){ // Wait a bit before opening because font etc.. may still not be fully loaded/rendered and it's
+uglys..
+body.style.overflow = "hidden"
+sideloaders[0].style.opacity = "0";
+sideloaders[0].style.transform = "scale(3)";
+sideloaders[0].style.zIndex = "-99999";
+body.style.overflow = "visible"
+console.log("loading page closed - REAAAADY !!");
+},100)
 };
 closeLoadingPage();
 document.getElementById("bodycontent").onscroll = function() {scrollBarProgress()};
 function scrollBarProgress()
 {
-	var winScroll = document.getElementById("bodycontent").scrollTop;
-	var height = document.getElementById("bodycontent").scrollHeight - document.getElementById("bodycontent").clientHeight;
-	var scrolled = (winScroll / height) * 100;
-	document.getElementById("progressionBar").style.width = scrolled + "%";
+var winScroll = document.getElementById("bodycontent").scrollTop;
+var height = document.getElementById("bodycontent").scrollHeight - document.getElementById("bodycontent").clientHeight;
+var scrolled = (winScroll / height) * 100;
+document.getElementById("progressionBar").style.width = scrolled + "%";
 }
 }
