@@ -31,4 +31,4 @@ for (var i = 0; i < scripts.length; i++) { if (scripts[i].innerText) { // If scr
     eval(scripts[i].innerText); } else { // If script is external, fetch and evaluate it
     fetch(scripts[i].src).then(function (data) { data.text().then(function (r) { eval(r); }) }); } // Remove the script
     element to avoid repetition scripts[i].parentNode.removeChild(scripts[i]); } console.log("Successfully loaded
-    bodycontent"); console.log("Loading BodyContent ..."); }); }; }
+    bodycontent"); console.log("Loading BodyContent ..."); }); };}

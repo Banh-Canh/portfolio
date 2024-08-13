@@ -53,8 +53,10 @@ templ IndexPage(posts []parsing.Post) {
 <main>
     for _, post := range posts {
     <div>
-        <a href={ templ.URL("/" + path.Join(post.Date.Format("2006/01/02"), slug.Make(post.Title)+"/")) }>{
-            post.Date.Format("2006/01/02") } : { post.Title }</a>
+        <a href={ templ.URL("/" + path.Join(post.Date.Format("2006/01/02"), slug.Make(post.Title)+"/")) }>
+            {
+            post.Date.Format("2006/01/02") } : { post.Title }
+        </a>
     </div>
     }
 </main>
@@ -82,7 +84,8 @@ templ LoadingPage(htmlString string) {
         <noscript>
             <div
                 style="z-index:99999;width:100%;top:13%;left:0;position:fixed;background-color:black;text-align:center;font-size:5vw;color:white;">
-                JAVASCRIPT REQUIRED</div>
+                JAVASCRIPT REQUIRED
+            </div>
         </noscript>
         <div class="sideloader">
             <div class="lds-ring">
